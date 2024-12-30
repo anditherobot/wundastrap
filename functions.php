@@ -43,3 +43,9 @@ if ( class_exists( 'Jetpack' ) ) {
 foreach ( $understrap_includes as $file ) {
 	require_once get_theme_file_path( $understrap_inc_dir . $file );
 }
+
+// Add this to your functions.php
+function add_bootstrap_icons() {
+    wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
+}
+add_action('wp_enqueue_scripts', 'add_bootstrap_icons');
