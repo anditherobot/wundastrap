@@ -10,11 +10,15 @@ $container = get_theme_mod( 'understrap_container_type' );
         <?php esc_html_e( 'Main Navigation', 'understrap' ); ?>
     </h2>
     <div class="<?php echo esc_attr( $container ); ?>">
-        <!-- Single navbar brand -->
-        <a class="navbar-brand fw-bold" rel="home" href="<?php echo esc_url( home_url( '/' ) ); ?>" itemprop="url">
-            <?php bloginfo( 'name' ); ?>
+        <!-- Logo and Brand -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" rel="home" href="<?php echo esc_url( home_url( '/' ) ); ?>" itemprop="url">
+            <?php
+            if ( has_custom_logo() ) {
+                the_custom_logo();
+            }
+            ?>
+            <span class="brand-text"><?php bloginfo( 'name' ); ?></span>
         </a>
-
         <!-- Toggle button -->
         <button
             class="navbar-toggler"
@@ -27,7 +31,6 @@ $container = get_theme_mod( 'understrap_container_type' );
         >
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <!-- Main Menu -->
         <?php
         wp_nav_menu(
@@ -45,38 +48,67 @@ $container = get_theme_mod( 'understrap_container_type' );
         ?>
     </div>
 </nav>
-
 <style>
-/* Brand text styling */
+/* Logo Styling with enforced size */
+.navbar-brand img.custom-logo,
+.custom-logo-link img {
+    max-height: 50px !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 10px;
+    object-fit: contain !important;
+}
+/* SVG Logo Support */
+.navbar-brand svg {
+    max-height: 50px !important;
+    width: auto !important;
+    margin-right: 10px;
+}
+/* Brand Text */
 .navbar-brand {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 2rem;
+    display: flex !important;
+    align-items: center;
+}
+.brand-text {
+    font-size: 1.75rem;
+    font-weight: 800;  /* Increased from 700 for extra boldness */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-transform: uppercase;  /* Make text uppercase for more impact */
+    letter-spacing: 1px;  /* Add letter spacing for clarity */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);  /* Subtle shadow for depth */
+    font-family: 'Helvetica Neue', Arial, sans-serif;  /* Clean, modern font */
+}
+/* Main Menu Styling */
+#main-nav .navbar-nav .nav-item .nav-link {
+    font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    margin: 0;
-    padding: 1rem 0;
-    white-space: normal; /* Allows text to wrap */
-    line-height: 1.2;
-    max-width: 200px; /* Adjust based on your needs */
 }
-
-/* Navigation items */
-.navbar-nav .nav-link {
-    font-weight: 700;
-    padding-left: 1rem;
-    padding-right: 1rem;
+#main-nav .navbar-nav .nav-item .dropdown-menu .dropdown-item {
+    font-size: 1.25rem;
 }
-
-/* Navbar adjustment */
-.navbar {
-    padding: 0.5rem 0;
-}
-
 /* Mobile adjustments */
 @media (max-width: 767.98px) {
     .navbar-brand {
         font-size: 1.5rem;
-        max-width: 150px;
     }
+	.brand-text {
+        font-size: 1.5rem;
+        height: auto;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);  /* Smaller shadow for mobile */
+    }
+    .navbar-toggler {
+        height: 50px; /* Match the logo height */
+        display: flex;
+        align-items: center;
+    }
+
+	.navbar-brand:hover .brand-text {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
 }
 </style>
