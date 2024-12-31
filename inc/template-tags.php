@@ -279,40 +279,91 @@ if ( ! function_exists( 'understrap_edit_post_link' ) ) {
 }
 
 if ( ! function_exists( 'understrap_post_nav' ) ) {
-	/**
-	 * Display navigation to next/previous post when applicable.
-	 *
-	 * @global WP_Post|null $post The current post.
-	 */
-	function understrap_post_nav() {
-		global $post;
-		if ( ! $post ) {
-			return;
-		}
+    function understrap_post_nav() {
+        global $post;
 
-		// Don't print empty markup if there's nowhere to navigate.
-		$previous = ( is_attachment() ) ? get_post( $post->post_parent ) : get_adjacent_post( false, '', true );
-		$next     = get_adjacent_post( false, '', false );
-		if ( ! $next && ! $previous ) {
-			return;
-		}
-		?>
-		<nav class="container navigation post-navigation">
-			<h2 class="screen-reader-text"><?php esc_html_e( 'Post navigation', 'understrap' ); ?></h2>
-			<div class="d-flex nav-links justify-content-between">
-				<?php
-				if ( get_previous_post_link() ) {
-					previous_post_link( '<span class="nav-previous">%link</span>', _x( '<i class="fa fa-angle-left"></i>&nbsp;%title', 'Previous post link', 'understrap' ) );
-				}
-				if ( get_next_post_link() ) {
-					next_post_link( '<span class="nav-next">%link</span>', _x( '%title&nbsp;<i class="fa fa-angle-right"></i>', 'Next post link', 'understrap' ) );
-				}
-				?>
-			</div><!-- .nav-links -->
-		</nav><!-- .post-navigation -->
-		<?php
-	}
+        if ( ! $post ) {
+            return;
+        }
+
+        // Get the previous and next posts.
+        $previous_post = get_adjacent_post( false, '', true );
+        $next_post     = get_adjacent_post( false, '', false );
+
+        // Return early if neither a previous nor next post exists.
+        if ( ! $previous_post && ! $next_post ) {
+            return;
+        }
+
+        // Add custom inline CSS
+        ?>
+        <style>
+            .fixed-width {
+                max-width: 150px; /* Adjust width as needed */
+                min-width: 150px; /* Ensure consistent size */
+                text-align: center;
+                white-space: normal; /* Allow wrapping */
+                overflow: hidden; /* Hide overflowing text */
+                text-overflow: ellipsis; /* Add ellipsis for truncated text */
+                word-wrap: break-word; /* Wrap long words */
+            }
+
+            .btn span.text-truncate {
+                display: block;
+                max-height: 3em; /* Enough for two lines of text */
+                line-height: 1.2;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            @media (max-width: 576px) {
+                .fixed-width {
+                    max-width: 120px; /* Reduce size for smaller screens */
+                    min-width: 120px;
+                }
+            }
+        </style>
+        <?php
+
+        ?>
+        <nav class="container navigation post-navigation my-4 p-3 bg-light rounded shadow">
+            <h2 class="screen-reader-text"><?php esc_html_e( 'Post navigation', 'understrap' ); ?></h2>
+            <div class="d-flex nav-links justify-content-between align-items-center">
+                <!-- Previous Post Link -->
+                <?php if ( $previous_post ) : ?>
+                    <a href="<?php echo esc_url( get_permalink( $previous_post->ID ) ); ?>" 
+                       class="btn btn-primary d-flex align-items-center fixed-width" 
+                       title="<?php esc_attr_e( 'Previous Post', 'understrap' ); ?>">
+                        <i class="bi bi-arrow-left-circle me-2" aria-hidden="true"></i>
+                        <span class="text-truncate"><?php echo esc_html( get_the_title( $previous_post->ID ) ); ?></span>
+                    </a>
+                <?php else : ?>
+                    <span class="btn btn-secondary disabled d-flex align-items-center fixed-width">
+                        <i class="bi bi-arrow-left-circle me-2" aria-hidden="true"></i>
+                        <span><?php esc_html_e( 'No Previous Post', 'understrap' ); ?></span>
+                    </span>
+                <?php endif; ?>
+
+                <!-- Next Post Link -->
+                <?php if ( $next_post ) : ?>
+                    <a href="<?php echo esc_url( get_permalink( $next_post->ID ) ); ?>" 
+                       class="btn btn-primary d-flex align-items-center fixed-width" 
+                       title="<?php esc_attr_e( 'Next Post', 'understrap' ); ?>">
+                        <span class="text-truncate"><?php echo esc_html( get_the_title( $next_post->ID ) ); ?></span>
+                        <i class="bi bi-arrow-right-circle ms-2" aria-hidden="true"></i>
+                    </a>
+                <?php else : ?>
+                    <span class="btn btn-secondary disabled d-flex align-items-center fixed-width">
+                        <span><?php esc_html_e( 'No Next Post', 'understrap' ); ?></span>
+                        <i class="bi bi-arrow-right-circle ms-2" aria-hidden="true"></i>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </nav>
+        <?php
+    }
 }
+
 
 if ( ! function_exists( 'understrap_link_pages' ) ) {
 	/**
