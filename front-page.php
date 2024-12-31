@@ -17,7 +17,7 @@ get_header();
             <div class="col-md-12 content-area" id="primary">
 
                 <main class="site-main" id="main" role="main">
-                <?php get_template_part( 'template-parts/home/social-bar' ); ?>
+           
                     <?php get_template_part( 'template-parts/home/hero' ); ?>
                     <?php get_template_part( 'template-parts/home/latest-articles' ); ?>
                     <?php get_template_part( 'template-parts/home/categories-navigation' ); ?>
