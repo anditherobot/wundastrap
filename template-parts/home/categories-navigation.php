@@ -1,7 +1,7 @@
 <section class="categories-navigation py-4 bg-dark text-white">
     <div class="container">
         <div class="d-flex align-items-center mb-3">
-            <h2 class="h4 mb-0 fw-bold">🔍 Browse by Category</h2>
+            <h2 class="h4 mb-0 fw-bold">🔍 Navigasyon par Kategori</h2>
         </div>
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2">
             <?php

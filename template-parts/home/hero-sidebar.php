@@ -4,109 +4,253 @@
     <div class="nav-buttons mb-4">
         <a href="https://diksyone.mokreyol.com/" class="nav-button" aria-label="Dictionary Page">
             <i class="bi bi-book"></i>
-            <span class="button-text">Dictionary</span>
+            <span class="button-text">Diksyonè</span>
             <i class="bi bi-chevron-right arrow-icon"></i>
         </a>
         <a href="https://diksyone.mokreyol.com/" class="nav-button" aria-label="Technology Page">
             <i class="bi bi-laptop"></i>
-            <span class="button-text">Technology</span>
+            <span class="button-text">Teknoloji an Kreyòl</span>
             <i class="bi bi-chevron-right arrow-icon"></i>
         </a>
+    </div>
+    
+    <!-- Latest Articles -->
+    <div class="content-card mb-4">
+        <div class="card-header">
+            <h3 class="h5 mb-0">📚 Piblikasyon Resant</h3>
+        </div>
+        <div class="card-content">
+            <?php
+            $recent_posts = new WP_Query([
+                'posts_per_page' => 5,
+                'post__not_in' => array(get_the_ID())
+            ]);
+            ?>
+            <?php if ($recent_posts->have_posts()): ?>
+                <?php while ($recent_posts->have_posts()): $recent_posts->the_post(); ?>
+                    <article class="article-item">
+                        <a href="<?php the_permalink(); ?>" class="article-link">
+                            <h6 class="article-title"><?php the_title(); ?></h6>
+                        </a>
+                    </article>
+                <?php endwhile; wp_reset_postdata(); ?>
+            <?php else: ?>
+                <p class="empty-message">Pa gen piblikasyon pou kounye a.</p>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 
 <style>
-/* Sidebar Widgets Container */
+/* Variables for consistent styling */
+:root {
+    --primary-gradient: linear-gradient(45deg, #6a11cb 25%, #2575fc 75%);
+    --hover-gradient: linear-gradient(45deg, #5a0fb3 25%, #2167e8 75%);
+    --bg-light: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --border-light: #e9ecef;
+    --text-dark: #2c2c2c;
+    --text-muted: #6c757d;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s ease;
+}
+
+/* Sidebar Container */
 .sidebar-widgets {
-    --primary-color: #7951F1;
-    --hover-color: #6840d9;
-    --text-color: #2d3748;
-    --transition-time: 0.3s;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 1rem;
+    border: 1px solid var(--border-light);
 }
 
-/* Main Navigation Buttons */
-.nav-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+/* Navigation Buttons */
 .nav-button {
     display: flex;
     align-items: center;
-    padding: 16px 20px;
-    background-color: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    color: var(--text-color);
+    padding: 1rem 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    color: var(--text-dark);
     text-decoration: none;
     font-weight: 600;
-    transition: all var(--transition-time) ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: 'Poppins', sans-serif;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
 }
 
 .nav-button:hover {
-    border-color: var(--primary-color);
-    background-color: #f8f9ff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    background: var(--primary-gradient);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .nav-button i {
-    font-size: 1.2em;
-    margin-right: 12px;
-    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-button:hover i {
+    -webkit-text-fill-color: #fff;
 }
 
 .nav-button .button-text {
     flex: 1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
 }
 
+/* Content Card Styling */
+.content-card {
+    background: var(--bg-light);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+
+.content-card .card-header {
+    background: var(--primary-gradient);
+    padding: 1rem;
+    text-align: center;
+}
+
+.content-card .card-content {
+    padding: 1rem;
+    background: var(--bg-secondary);
+}
+
+/* Article Items */
+.article-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.article-link {
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: var(--transition);
+    display: block;
+}
+
+.article-link:hover {
+    color: #6a11cb;
+    transform: translateX(6px);
+}
+
+.article-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    margin: 1rem 0;
+    font-style: italic;
+}
+
+/* Add subtle hover effects */
 .nav-button .arrow-icon {
     margin-left: auto;
-    margin-right: 0;
-    font-size: 0.9em;
-    opacity: 0.5;
-    transition: transform var(--transition-time);
+    transition: transform 0.3s ease;
+    color: var(--text-muted);
 }
 
 .nav-button:hover .arrow-icon {
-    transform: translateX(4px);
-    opacity: 1;
+    transform: translateX(6px);
+    color: #fff;
+}
+/* Content Card Styling */
+.content-card {
+    background: var(--bg-dark);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-dark);
+}
+
+.content-card .card-header {
+    background: var(--primary-gradient);
+    padding: 1rem;
+    text-align: center;
+}
+
+.content-card .card-header h3 {
+    color: #fff;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+}
+
+.content-card .card-content {
+    padding: 1rem;
+}
+
+/* Article Items */
+.article-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.article-item:last-child {
+    border-bottom: none;
+}
+
+.article-link {
+    text-decoration: none;
+    color: var(--text-light);
+    transition: var(--transition);
+    display: block;
+}
+
+.article-link:hover {
+    color: #fff;
+    transform: translateX(6px);
+}
+
+.article-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.empty-message {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 1rem 0;
+    font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .nav-button .button-text {
+        font-size: 1rem;
+    }
+    
+    .nav-button {
+        padding: 0.875rem 1rem;
+    }
+    
+    .nav-button i {
+        font-size: 1.25rem;
+    }
 }
 </style>
-<!-- Latest Articles -->
-<div class="card shadow-sm border-0 mb-4">
-    <div class="card-header bg-primary text-white text-center py-3">
-        <h3 class="h5 mb-0">📚 Piblikasyon Resant</h3>
-    </div>
-    <div class="p-3">
-        <?php
-        $recent_posts = new WP_Query([
-            'posts_per_page' => 5,
-            'post__not_in' => array(get_the_ID())
-        ]);
-        ?>
-
-        <?php if ($recent_posts->have_posts()): ?>
-            <?php while ($recent_posts->have_posts()): $recent_posts->the_post(); ?>
-                <article class="mb-2">
-                    <a href="<?php the_permalink(); ?>" class="text-decoration-none link-primary d-block py-2">
-                        <h6 class="mb-0 text-truncate"><?php the_title(); ?></h6>
-                    </a>
-                    <hr class="my-2">
-                </article>
-            <?php endwhile; wp_reset_postdata(); ?>
-        <?php else: ?>
-            <p class="text-center text-muted mb-0">Pa gen piblikasyon pou kounye a.</p>
-        <?php endif; ?>
-    </div>
-</div>
 
 <?php
 // Condition to hide or show the template part
 $show_weather = false; // Change this condition as needed
-
 if ($show_weather) {
     get_template_part('template-parts/home/hero-sidebar-weather');
 }
