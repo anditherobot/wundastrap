@@ -1,45 +1,48 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <?php
-            $featured_query = new WP_Query([
-                'category_name' => 'featured',
-                'posts_per_page' => 1
-            ]);
-
-            if ($featured_query->have_posts()):
-                while ($featured_query->have_posts()): $featured_query->the_post(); ?>
+<div class="row">
+    <div class="col-12">
+        <?php
+        $featured_query = new WP_Query([
+            'category_name' => 'featured',
+            'posts_per_page' => 1
+        ]);
+        if ($featured_query->have_posts()):
+            while ($featured_query->have_posts()): $featured_query->the_post(); ?>
+                <a href="<?php the_permalink(); ?>" class="text-decoration-none">
                     <div class="card mb-3 border-0">
                         <div class="row g-0">
-                            <div class="col-md-7 position-relative">
+                            <div class="col-md-8 position-relative">
                                 <?php if (has_post_thumbnail()): ?>
                                     <img src="<?php echo get_the_post_thumbnail_url(null, 'large'); ?>"
                                         class="img-fluid rounded-start"
                                         alt="<?php echo get_the_title(); ?>"
-                                        style="object-fit: cover; height: 100%;">
+                                        style="object-fit: cover; height: 200px; width: 100%;"> <!-- Reduced from 400px to 300px -->
+                                <?php else: ?>
+                                    <div class="bg-light rounded-start" style="height: 200px;"></div>
                                 <?php endif; ?>
                                 <div class="position-absolute top-0 start-0 m-2 bg-white p-1 rounded">
-                                    <span class="fw-bold small">YOUR SITE</span><br />
-                                    <small class="text-muted"><?php echo get_the_time('H:i'); ?> DIRECT</small>
+                                    <span class="fw-bold ">À l'affiche</span><br />
+                                    
                                 </div>
                             </div>
-                            <div class="col-md-5 d-flex flex-column justify-content-center bg-light rounded-end">
-                                <div class="card-body">
-                                    <h2 class="card-title fw-bold mb-2" style="font-size: 1.75rem; line-height: 1.2;">
+                            <div class="col-md-4 d-flex flex-column justify-content-center bg-light rounded-end">
+                                <div class="card-body py-2"> <!-- Reduced vertical padding -->
+                                    <h2 class="card-title fw-bold mb-1 text-dark" style="font-size: 1.5rem; line-height: 1.2;"> <!-- Reduced font size and margin -->
                                         <?php the_title(); ?>
                                     </h2>
-                                    <p class="card-text text-muted" style="font-size: 0.9rem; line-height: 1.4;">
-                                        <?php echo get_the_excerpt(); ?>
+                                    <p class="card-text text-muted mb-0" style="font-size: 0.85rem; line-height: 1.3;"> <!-- Reduced font size, line height and margin -->
+                                        <?php echo wp_trim_words(get_the_excerpt(), 30); ?> <!-- Reduced word count -->
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-            <?php endwhile;
-                wp_reset_postdata();
-            endif; ?>
-        </div>
+                </a>
+        <?php endwhile;
+            wp_reset_postdata();
+        endif; ?>
     </div>
+</div>
 
     <div class="row">
         <div class="col">
