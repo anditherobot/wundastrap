@@ -13,7 +13,6 @@
             <i class="bi bi-chevron-right arrow-icon"></i>
         </a>
     </div>
-
 </div>
 
 <style>
@@ -75,8 +74,6 @@
     transform: translateX(4px);
     opacity: 1;
 }
-
-
 </style>
 
 <!-- Latest Articles -->
@@ -106,5 +103,11 @@
     </div>
 </div>
 
+<?php
+// Condition to hide or show the template part
+$show_weather = false; // Change this condition as needed
 
-<?php get_template_part('template-parts/home/hero-sidebar-weather'); ?>
+if ($show_weather) {
+    get_template_part('template-parts/home/hero-sidebar-weather');
+}
+?>
