@@ -2,12 +2,12 @@
 <div class="sidebar-widgets">
     <!-- Main Navigation Buttons -->
     <div class="nav-buttons mb-4">
-        <a href="/dictionary" class="nav-button" aria-label="Dictionary Page">
+        <a href="https://diksyone.mokreyol.com/" class="nav-button" aria-label="Dictionary Page">
             <i class="bi bi-book"></i>
             <span class="button-text">Dictionary</span>
             <i class="bi bi-chevron-right arrow-icon"></i>
         </a>
-        <a href="/technology" class="nav-button" aria-label="Technology Page">
+        <a href="https://diksyone.mokreyol.com/" class="nav-button" aria-label="Technology Page">
             <i class="bi bi-laptop"></i>
             <span class="button-text">Technology</span>
             <i class="bi bi-chevron-right arrow-icon"></i>
@@ -75,31 +75,31 @@
     opacity: 1;
 }
 </style>
-
 <!-- Latest Articles -->
-<div class="card mb-4">
-    <div class="card-header bg-white">
-        <h3 class="h6 mb-0">Latest Articles</h3>
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-primary text-white text-center py-3">
+        <h3 class="h5 mb-0">📚 Piblikasyon Resant</h3>
     </div>
-    <div class="list-group list-group-flush">
+    <div class="p-3">
         <?php
         $recent_posts = new WP_Query([
             'posts_per_page' => 5,
             'post__not_in' => array(get_the_ID())
         ]);
+        ?>
 
-        if ($recent_posts->have_posts()):
-            while ($recent_posts->have_posts()): $recent_posts->the_post(); ?>
-                <a href="<?php the_permalink(); ?>" class="list-group-item list-group-item-action">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-1 text-truncate"><?php the_title(); ?></h6>
-                        <small class="text-muted"><?php echo get_the_date('M d'); ?></small>
-                    </div>
-                </a>
-            <?php
-            endwhile;
-            wp_reset_postdata();
-        endif; ?>
+        <?php if ($recent_posts->have_posts()): ?>
+            <?php while ($recent_posts->have_posts()): $recent_posts->the_post(); ?>
+                <article class="mb-2">
+                    <a href="<?php the_permalink(); ?>" class="text-decoration-none link-primary d-block py-2">
+                        <h6 class="mb-0 text-truncate"><?php the_title(); ?></h6>
+                    </a>
+                    <hr class="my-2">
+                </article>
+            <?php endwhile; wp_reset_postdata(); ?>
+        <?php else: ?>
+            <p class="text-center text-muted mb-0">Pa gen piblikasyon pou kounye a.</p>
+        <?php endif; ?>
     </div>
 </div>
 
