@@ -10,7 +10,7 @@ $container = get_theme_mod( 'understrap_container_type' );
         <?php esc_html_e( 'Main Navigation', 'understrap' ); ?>
     </h2>
     <div class="<?php echo esc_attr( $container ); ?>">
-        <!-- Logo and Brand -->
+        <!-- Logo and Brand (unchanged) -->
         <a class="navbar-brand fw-bold d-flex align-items-center" rel="home" href="<?php echo esc_url( home_url( '/' ) ); ?>" itemprop="url">
             <?php
             if ( has_custom_logo() ) {
@@ -19,33 +19,30 @@ $container = get_theme_mod( 'understrap_container_type' );
             ?>
             <span class="brand-text"><?php bloginfo( 'name' ); ?></span>
         </a>
-        <!-- Toggle button -->
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="<?php esc_attr_e( 'Toggle navigation', 'understrap' ); ?>"
-        >
+
+        <!-- Toggle button (unchanged) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle navigation', 'understrap' ); ?>">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- Main Menu -->
-        <?php
-        wp_nav_menu(
-            array(
-                'theme_location'  => 'primary',
-                'container_class' => 'collapse navbar-collapse',
-                'container_id'    => 'navbarNavDropdown',
-                'menu_class'      => 'navbar-nav ms-auto fw-bold',
-                'fallback_cb'     => '',
-                'menu_id'         => 'main-menu',
-                'depth'           => 2,
-                'walker'          => new Understrap_WP_Bootstrap_Navwalker(),
-            )
-        );
-        ?>
+
+        <!-- Modified Navigation Container -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <?php
+            wp_nav_menu(
+                array(
+                    'theme_location'  => 'primary',
+                    'menu_class'      => 'navbar-nav me-auto fw-bold', // Changed from ms-auto to me-auto
+                    'fallback_cb'     => '',
+                    'menu_id'         => 'main-menu',
+                    'depth'           => 2,
+                    'walker'          => new Understrap_WP_Bootstrap_Navwalker(),
+                    'container'       => false,
+                )
+            );
+            ?>
+            
+            <?php get_template_part( 'template-parts/home/social-bar' ); ?>
+        </div>
     </div>
 </nav>
 <style>

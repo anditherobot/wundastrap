@@ -1,11 +1,83 @@
-<!-- Action Buttons -->
-<div class="mb-4">
-    <div class="d-grid gap-3">
-        <a href="#" class="btn btn-outline-primary">Subscribe to Newsletter</a>
-        <a href="#" class="btn btn-outline-primary">Submit Article</a>
-        <a href="#" class="btn btn-outline-primary">Join Community</a>
+<!-- Combined Navigation & Social Container -->
+<div class="sidebar-widgets">
+    <!-- Main Navigation Buttons -->
+    <div class="nav-buttons mb-4">
+        <a href="/dictionary" class="nav-button" aria-label="Dictionary Page">
+            <i class="bi bi-book"></i>
+            <span class="button-text">Dictionary</span>
+            <i class="bi bi-chevron-right arrow-icon"></i>
+        </a>
+        <a href="/technology" class="nav-button" aria-label="Technology Page">
+            <i class="bi bi-laptop"></i>
+            <span class="button-text">Technology</span>
+            <i class="bi bi-chevron-right arrow-icon"></i>
+        </a>
     </div>
+
 </div>
+
+<style>
+/* Sidebar Widgets Container */
+.sidebar-widgets {
+    --primary-color: #7951F1;
+    --hover-color: #6840d9;
+    --text-color: #2d3748;
+    --transition-time: 0.3s;
+}
+
+/* Main Navigation Buttons */
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nav-button {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-time) ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nav-button:hover {
+    border-color: var(--primary-color);
+    background-color: #f8f9ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+}
+
+.nav-button i {
+    font-size: 1.2em;
+    margin-right: 12px;
+    color: var(--primary-color);
+}
+
+.nav-button .button-text {
+    flex: 1;
+}
+
+.nav-button .arrow-icon {
+    margin-left: auto;
+    margin-right: 0;
+    font-size: 0.9em;
+    opacity: 0.5;
+    transition: transform var(--transition-time);
+}
+
+.nav-button:hover .arrow-icon {
+    transform: translateX(4px);
+    opacity: 1;
+}
+
+
+</style>
 
 <!-- Latest Articles -->
 <div class="card mb-4">
@@ -34,38 +106,5 @@
     </div>
 </div>
 
-<!-- Weather Widget -->
-<div class="card">
-    <div class="card-body">
-        <h3 class="h6 mb-3">Local Weather</h3>
-        <div class="text-center">
-            <!-- You'll need to integrate with a weather API -->
-            <div class="display-4 mb-2">
-                <i class="bi bi-cloud-sun"></i>
-            </div>
-            <div class="h4 mb-0">72°F</div>
-            <small class="text-muted">New York, NY</small>
-        </div>
-    </div>
-</div>
-<style>
-    .list-group-item {
-        h6 {
-            max-width: 80%;
-            font-size: 0.9rem;
-        }
-    }
 
-    .card-header {
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    /* To complete this implementation:
-
-Add Bootstrap Icons to your theme (for the weather icon)
-Integrate with a weather API of your choice
-Update the action button links to point to your actual pages
-Adjust the color scheme to match your brand
-
-Would you like me to modify anything in this implementation?*/
-</style>
+<?php get_template_part('template-parts/home/hero-sidebar-weather'); ?>
