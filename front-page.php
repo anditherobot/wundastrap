@@ -21,9 +21,7 @@ get_header();
                     <?php get_template_part( 'template-parts/home/hero' ); ?>
                     <?php get_template_part( 'template-parts/home/latest-articles' ); ?>
                     <?php get_template_part( 'template-parts/home/categories-navigation' ); ?>
-                    <?php get_template_part( 'template-parts/home/trending-articles' ); ?>
-                    <?php get_template_part( 'template-parts/home/search-bar' ); ?>
-                    <?php get_template_part( 'template-parts/home/featured-categories' ); ?>
+                    
                     <?php get_template_part( 'template-parts/home/newsletter-signup' ); ?>
 
                 </main><!-- #main -->

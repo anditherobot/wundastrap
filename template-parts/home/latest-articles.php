@@ -40,7 +40,7 @@
         
         <div class="text-center mt-4">
             <a href="<?php echo esc_url(get_post_type_archive_link('post')); ?>" 
-               class="btn btn-outline-primary">View All Articles</a>
+               class="btn btn-outline-primary">Rès Atik Yo</a>
         </div>
     </div>
 </section>
