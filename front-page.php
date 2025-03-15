@@ -22,43 +22,42 @@ $container = get_theme_mod( 'understrap_container_type' );
             <main class="site-main" id="main">
 
                 <section class="category-list">
-                    <h2>Explore Categories</h2>
+                 
                     <?php get_template_part( 'template-parts/category-list' ); ?>
                 </section>
 
                 <section class="posts-grid">
-                    <?php
-                    $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-                    $args = array(
-                        'post_type' => 'post',
-                        'posts_per_page' => 9,
-                        'paged' => $paged,
-                    );
-                    $wp_query = new WP_Query( $args );
+    <?php
+    $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 9,
+        'paged' => $paged,
+    );
+    $wp_query = new WP_Query( $args );
 
-                    if ( $wp_query->have_posts() ) :
-                        while ( $wp_query->have_posts() ) : $wp_query->the_post();
-                            $featured_image_url = get_the_post_thumbnail_url( get_the_ID(), 'large' );
-                            ?>
-                            <div class="grid-item post-card">
-                                <?php if ( $featured_image_url ) : ?>
-                                    <img src="<?php echo esc_url( $featured_image_url ); ?>" alt="<?php the_title_attribute(); ?>">
-                                <?php endif; ?>
-                                <div class="card-content">
-                                    <h2 class="card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                                </div>
-                            </div>
-                            <?php
-                        endwhile;
-                        wp_reset_postdata();
-                        ?>
-                    </section>
-
-               
-
-                    <?php else : ?>
-                        <p><?php esc_html_e( 'No posts found.', 'your-theme' ); ?></p>
+    if ( $wp_query->have_posts() ) :
+        while ( $wp_query->have_posts() ) : $wp_query->the_post();
+            $featured_image_url = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+            ?>
+            <a href="<?php the_permalink(); ?>" class="grid-item post-card-link">
+                <div class="post-card">
+                    <?php if ( $featured_image_url ) : ?>
+                        <img src="<?php echo esc_url( $featured_image_url ); ?>" alt="<?php the_title_attribute(); ?>">
                     <?php endif; ?>
+                    <div class="card-content">
+                        <h2 class="card-title"><?php the_title(); ?></h2>
+                    </div>
+                </div>
+            </a>
+            <?php
+        endwhile;
+        wp_reset_postdata();
+        ?>
+    </section>
+    <?php else : ?>
+        <p><?php esc_html_e( 'No posts found.', 'your-theme' ); ?></p>
+    <?php endif; ?>
 
             </main><!-- #main -->
 
@@ -69,40 +68,7 @@ $container = get_theme_mod( 'understrap_container_type' );
 </div><!-- #front-page-wrapper -->
 
 <style>
-/* Basic styling for the category list */
-.category-list {
-    margin-bottom: 30px;
-    text-align: center;
-}
 
-.category-list h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.category-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-
-.category-list li a {
-    display: block;
-    background-color: #f0f0f0; /* Example background color */
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.category-list li a:hover {
-    background-color: #e0e0e0;
-}
 
 /* Basic grid and card styling */
 .posts-grid {
