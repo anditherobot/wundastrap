@@ -333,14 +333,14 @@ if ( ! function_exists( 'understrap_post_nav' ) ) {
                 <?php if ( $previous_post ) : ?>
                     <a href="<?php echo esc_url( get_permalink( $previous_post->ID ) ); ?>" 
                        class="btn btn-primary d-flex align-items-center fixed-width" 
-                       title="<?php esc_attr_e( 'Previous Post', 'understrap' ); ?>">
+                       title="<?php esc_attr_e( 'Article Précédent', 'understrap' ); ?>">
                         <i class="bi bi-arrow-left-circle me-2" aria-hidden="true"></i>
                         <span class="text-truncate"><?php echo esc_html( get_the_title( $previous_post->ID ) ); ?></span>
                     </a>
                 <?php else : ?>
                     <span class="btn btn-secondary disabled d-flex align-items-center fixed-width">
                         <i class="bi bi-arrow-left-circle me-2" aria-hidden="true"></i>
-                        <span><?php esc_html_e( 'No Previous Post', 'understrap' ); ?></span>
+                        <span><?php esc_html_e( 'Sans Presedan', 'understrap' ); ?></span>
                     </span>
                 <?php endif; ?>
 
@@ -348,13 +348,13 @@ if ( ! function_exists( 'understrap_post_nav' ) ) {
                 <?php if ( $next_post ) : ?>
                     <a href="<?php echo esc_url( get_permalink( $next_post->ID ) ); ?>" 
                        class="btn btn-primary d-flex align-items-center fixed-width" 
-                       title="<?php esc_attr_e( 'Next Post', 'understrap' ); ?>">
+                       title="<?php esc_attr_e( 'Article Suivant', 'understrap' ); ?>">
                         <span class="text-truncate"><?php echo esc_html( get_the_title( $next_post->ID ) ); ?></span>
                         <i class="bi bi-arrow-right-circle ms-2" aria-hidden="true"></i>
                     </a>
                 <?php else : ?>
                     <span class="btn btn-secondary disabled d-flex align-items-center fixed-width">
-                        <span><?php esc_html_e( 'No Next Post', 'understrap' ); ?></span>
+                        <span><?php esc_html_e( 'San Suivan', 'understrap' ); ?></span>
                         <i class="bi bi-arrow-right-circle ms-2" aria-hidden="true"></i>
                     </span>
                 <?php endif; ?>

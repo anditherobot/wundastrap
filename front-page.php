@@ -25,19 +25,8 @@ if (is_front_page()) {
         <div class="row">
             <main class="col-12" id="main">
                 
-                <!-- Category List Section -->
-                <section class="category-list mb-4">
-                    <ul class="list-inline d-flex flex-wrap justify-content-center gap-2 pb-3 border-bottom">
-                        <?php
-                        $categories = get_categories();
-                        foreach ($categories as $category) {
-                            echo '<li class="list-inline-item">';
-                            echo '<a href="' . esc_url(get_category_link($category->term_id)) . '" class="btn btn-sm btn-outline-secondary">';
-                            echo esc_html($category->name);
-                            echo '</a></li>';
-                        }
-                        ?>
-                    </ul>
+            <section class="category-list">
+                    <?php get_template_part( 'template-parts/category-list' ); ?>
                 </section>
                 
                 <!-- Posts Grid Section -->
