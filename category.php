@@ -8,6 +8,10 @@ $container = get_theme_mod('understrap_container_type');
     <div class="<?php echo esc_attr($container); ?>">
         <div class="row justify-content-center">
             <main class="site-main" id="main">
+            <section class="category-list">
+                    <?php get_template_part( 'template-parts/category-list' ); ?>
+                </section>
+                
                 <header class="page-header bg-dark text-white py-4 mb-4 text-center rounded">
                     <h1 class="page-title" style="font-size: 2rem; font-weight: 700;">
                         <?php echo single_cat_title('', false); ?>
