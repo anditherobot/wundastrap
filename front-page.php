@@ -1,122 +1,286 @@
 <?php
 /**
- * Template Name: Front Page with Category List and Paginated Grid
+ * Template Name: News Homepage Layout
  *
- * This is a custom front page template that displays a list of categories
- * and a paginated list of recent posts.
+ * A custom front page template that mimics a modern news website layout
+ * with hero section, trending sidebar, weather widget, and news grid.
  *
  * @package your-theme
  */
 
 get_header();
 
-$container = get_theme_mod('understrap_container_type', 'container');
+$container = get_theme_mod('understrap_container_type', 'container-fluid');
 
-// Fix for pagination on static front page
-// This is crucial for solving the #% issue
-$paged = get_query_var('paged') ? get_query_var('paged') : 1;
-if (is_front_page()) {
-    $paged = get_query_var('page') ? get_query_var('page') : $paged;
-}
+// Get recent posts for different sections
+$hero_post = get_posts(array('numberposts' => 1, 'post_status' => 'publish'));
+$trending_posts = get_posts(array('numberposts' => 8, 'offset' => 1, 'post_status' => 'publish'));
+$news_posts = get_posts(array('numberposts' => 6, 'offset' => 9, 'post_status' => 'publish'));
+$government_posts = get_posts(array('numberposts' => 1, 'category_name' => 'politics', 'post_status' => 'publish'));
 ?>
 
-<div class="wrapper" id="front-page-wrapper">
+<div class="wrapper news-homepage" id="front-page-wrapper">
     <div class="<?php echo esc_attr($container); ?>" id="content">
+        
+        <!-- Main Content Area -->
         <div class="row">
-            <main class="col-12" id="main">
+            <!-- Main Content -->
+            <div class="col-lg-8" id="main-content">
                 
-                <!-- Featured Jumbotron Section -->
-                <section class="featured-section">
-                    <?php get_template_part( 'template-parts/featured-jumbotron' ); ?>
-                </section>
-                
-            <section class="category-list">
-                    <?php get_template_part( 'template-parts/category-list' ); ?>
-                </section>
-                
-                <!-- Posts Grid Section -->
-                <section class="posts-grid">
-                    <?php
-                    $args = array(
-                        'post_type' => 'post',
-                        'posts_per_page' => 10,
-                        'paged' => $paged,
-                    );
-                    
-                    $custom_query = new WP_Query($args);
-
-                    if ($custom_query->have_posts()) :
-                        while ($custom_query->have_posts()) : $custom_query->the_post();
-                    ?>
-                            <a href="<?php the_permalink(); ?>" class="text-decoration-none text-body mb-3 d-block">
-                                <div class="card shadow-sm">
-                                    <div class="card-body d-flex align-items-center">
-                                        <?php if (has_post_thumbnail()) : ?>
-                                            <div class="flex-shrink-0 me-3">
-                                                <?php the_post_thumbnail('thumbnail', ['class' => 'rounded', 'style' => 'width: 50px; height: 50px; object-fit: cover;']); ?>
-                                            </div>
-                                        <?php endif; ?>
-                                        <div>
-                                            <h5 class="card-title mb-1"><?php the_title(); ?></h5>
-                                            <div class="card-text small text-muted">
-                                                <span class="me-2"><?php echo get_the_date(); ?></span>
-                                                <span><?php echo get_the_category_list(', '); ?></span>
-                                            </div>
-                                        </div>
+                <!-- Hero Section -->
+                <section class="hero-section mb-4">
+                    <?php if ($hero_post) : $post = $hero_post[0]; setup_postdata($post); ?>
+                    <div class="hero-card position-relative">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <div class="hero-image">
+                                        <?php the_post_thumbnail('large', ['class' => 'img-fluid h-100 w-100', 'style' => 'object-fit: cover;']); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="hero-content p-4 h-100 d-flex flex-column justify-content-center">
+                                    <h1 class="hero-title mb-3"><?php the_title(); ?></h1>
+                                    <div class="hero-excerpt mb-3">
+                                        <?php the_excerpt(); ?>
+                                    </div>
+                                    <div class="hero-meta text-muted small">
+                                        <span><?php echo get_the_date(); ?></span>
+                                        <span class="mx-2">•</span>
+                                        <span><?php echo get_the_category_list(', '); ?></span>
                                     </div>
                                 </div>
-                            </a>
-                    <?php
-                        endwhile;
-                        
-                        // Fixed pagination that works on static front pages
-                        $big = 999999999; // need an unlikely integer
-                        
-                        // This is the critical part that fixes the #% issue
-                        $paginate_links = paginate_links(array(
-                            'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                            'format' => '?paged=%#%',
-                            'current' => max(1, $paged),
-                            'total' => $custom_query->max_num_pages,
-                            'prev_text' => '&laquo;',
-                            'next_text' => '&raquo;',
-                            'type' => 'array',
-                        ));
-                        
-                        if ($paginate_links) {
-                            echo '<nav aria-label="Page navigation" class="mt-4">';
-                            echo '<ul class="pagination justify-content-center">';
-                            
-                            foreach ($paginate_links as $link) {
-                                // Convert WordPress pagination HTML to Bootstrap
-                                if (strpos($link, 'current') !== false) {
-                                    // Current page
-                                    $link = str_replace('page-numbers current', 'page-link', $link);
-                                    echo '<li class="page-item active">' . $link . '</li>';
-                                } else if (strpos($link, 'dots') !== false) {
-                                    // Ellipsis
-                                    $link = str_replace('page-numbers dots', 'page-link', $link);
-                                    echo '<li class="page-item disabled">' . $link . '</li>';
-                                } else {
-                                    // Regular link
-                                    $link = str_replace('page-numbers', 'page-link', $link);
-                                    echo '<li class="page-item">' . $link . '</li>';
-                                }
-                            }
-                            
-                            echo '</ul>';
-                            echo '</nav>';
-                        }
-                        
-                        wp_reset_postdata();
-                    else :
-                        echo '<div class="alert alert-info">No posts found.</div>';
-                    endif;
-                    ?>
+                            </div>
+                        </div>
+                        <a href="<?php the_permalink(); ?>" class="stretched-link"></a>
+                    </div>
+                    <?php wp_reset_postdata(); endif; ?>
                 </section>
-            </main>
+                
+                <!-- News Grid Section -->
+                <section class="news-grid">
+                    <div class="row g-3">
+                        <?php if ($news_posts) : foreach ($news_posts as $post) : setup_postdata($post); ?>
+                        <div class="col-md-4">
+                            <div class="news-card h-100">
+                                <a href="<?php the_permalink(); ?>" class="text-decoration-none">
+                                    <?php if (has_post_thumbnail()) : ?>
+                                    <div class="news-image mb-2">
+                                        <?php the_post_thumbnail('medium', ['class' => 'img-fluid rounded', 'style' => 'height: 150px; width: 100%; object-fit: cover;']); ?>
+                                    </div>
+                                    <?php endif; ?>
+                                    <h5 class="news-title text-dark"><?php the_title(); ?></h5>
+                                    <p class="news-excerpt text-muted small"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
+                                    <div class="news-meta text-muted small">
+                                        <span><?php echo get_the_date('j M'); ?></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <?php endforeach; wp_reset_postdata(); endif; ?>
+                    </div>
+                </section>
+                
+                <!-- Government Section -->
+                <section class="government-section mt-5">
+                    <?php if ($government_posts) : $post = $government_posts[0]; setup_postdata($post); ?>
+                    <div class="government-card bg-primary text-white p-4 rounded">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="mb-2">Gouvernement Bayrou:</h3>
+                                <h4 class="mb-3"><?php the_title(); ?></h4>
+                                <p class="mb-3"><?php echo wp_trim_words(get_the_excerpt(), 20); ?></p>
+                                <a href="<?php the_permalink(); ?>" class="btn btn-light btn-sm">Autres sujets »</a>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <?php the_post_thumbnail('medium', ['class' => 'img-fluid rounded']); ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php wp_reset_postdata(); endif; ?>
+                </section>
+                
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4" id="sidebar">
+                
+                <!-- Trending Section -->
+                <section class="trending-section mb-4">
+                    <h4 class="section-title mb-3">Tendances du jour</h4>
+                    <div class="trending-list">
+                        <?php if ($trending_posts) : $counter = 1; foreach ($trending_posts as $post) : setup_postdata($post); ?>
+                        <div class="trending-item d-flex align-items-center mb-3">
+                            <span class="trending-number me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 12px;"><?php echo $counter; ?></span>
+                            <div class="flex-grow-1">
+                                <a href="<?php the_permalink(); ?>" class="text-decoration-none text-dark">
+                                    <h6 class="mb-1"><?php the_title(); ?></h6>
+                                </a>
+                                <small class="text-muted"><?php echo get_the_category_list(', '); ?></small>
+                            </div>
+                        </div>
+                        <?php $counter++; endforeach; wp_reset_postdata(); endif; ?>
+                    </div>
+                </section>
+                
+                <!-- Weather Widget -->
+                <section class="weather-section mb-4">
+                    <div class="weather-card bg-light p-3 rounded">
+                        <h5 class="mb-3">Météo <small class="text-muted">Brusje</small></h5>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="weather-day">
+                                    <small>Aujourd'hui</small>
+                                    <div class="weather-icon my-2">☀️</div>
+                                    <strong>27°</strong>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="weather-day">
+                                    <small>Demain</small>
+                                    <div class="weather-icon my-2">⛅</div>
+                                    <strong>25°</strong>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="weather-day">
+                                    <small>Mercredi</small>
+                                    <div class="weather-icon my-2">🌧️</div>
+                                    <strong>22°</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Horoscope Section -->
+                <section class="horoscope-section mb-4">
+                    <div class="horoscope-card bg-light p-3 rounded">
+                        <h5 class="mb-3">Horoscope - Lion</h5>
+                        <p class="small text-muted mb-2">Bélier - Amour - Vous êtes très apprécié pour votre sincérité et votre générosité. Profitez de ce statut pour échanger et vous connecter...</p>
+                        <a href="#" class="text-primary small">Lire plus »</a>
+                    </div>
+                </section>
+                
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+.news-homepage {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hero-section {
+    margin-bottom: 2rem;
+}
+
+.hero-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-height: 300px;
+}
+
+.hero-image {
+    height: 300px;
+    overflow: hidden;
+}
+
+.hero-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.3;
+}
+
+.hero-excerpt {
+    color: #666;
+    line-height: 1.5;
+}
+
+.news-grid .news-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: transform 0.2s;
+}
+
+.news-grid .news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.news-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+}
+
+.news-excerpt {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+}
+
+.trending-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.trending-item:last-child {
+    border-bottom: none;
+}
+
+.trending-item h6 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+}
+
+.government-card {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+}
+
+.weather-card, .horoscope-card {
+    border: 1px solid #e0e0e0;
+}
+
+.weather-day {
+    padding: 0.5rem;
+}
+
+.weather-icon {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .hero-card .row {
+        flex-direction: column;
+    }
+    
+    .hero-image {
+        height: 200px;
+    }
+    
+    .container-fluid {
+        padding: 0 15px;
+    }
+}
+</style>
 
 <?php get_footer(); ?>

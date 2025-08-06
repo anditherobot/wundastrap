@@ -47,6 +47,24 @@ if ( ! function_exists( 'understrap_scripts' ) ) {
 
 add_action( 'wp_enqueue_scripts', 'understrap_scripts' );
 
+if ( ! function_exists( 'understrap_enqueue_bootstrap_icons' ) ) {
+	/**
+	 * Enqueue Bootstrap Icons CSS.
+	 *
+	 * @since 1.0.0
+	 */
+	function understrap_enqueue_bootstrap_icons() {
+		wp_enqueue_style(
+			'bootstrap-icons',
+			'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css',
+			array(),
+			'1.11.3'
+		);
+	}
+}
+
+add_action( 'wp_enqueue_scripts', 'understrap_enqueue_bootstrap_icons' );
+
 if ( ! function_exists( 'understrap_offcanvas_admin_bar_inline_styles' ) ) {
 	/**
 	 * Add inline styles for the offcanvas component if the admin bar is visible.
