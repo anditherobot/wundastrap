@@ -10,67 +10,51 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 <!-- Top Navigation Bar -->
-<nav class="news-nav bg-white border-bottom">
+<nav class="mokreyol-navbar">
     <div class="container-fluid">
-        <div class="row align-items-center py-2">
+        <div class="navbar-content d-flex align-items-center justify-content-center flex-column flex-lg-row">
             <!-- Brand -->
-            <div class="col-12 col-md-3 text-center text-md-start mb-2 mb-md-0">
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="brand-logo fw-bold text-primary fs-4">
+            <div class="navbar-brand-section text-center py-3">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="mokreyol-brand">
                     MOKREYOL
                 </a>
             </div>
             
-            <!-- Main Navigation Categories -->
-            <div class="col-12 col-md-7 mb-2 mb-md-0">
-                <div class="news-categories d-flex justify-content-center flex-wrap">
+            <!-- Main Navigation -->
+            <div class="navbar-menu-section">
+                <div class="mokreyol-nav-menu d-flex justify-content-center flex-wrap">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="mokreyol-nav-link <?php echo is_front_page() ? 'active' : ''; ?>">
+                        ACCUEIL
+                    </a>
                     <?php
                     // Get main categories for navigation
                     $categories = get_categories(array(
-                        'orderby' => 'count',
-                        'order' => 'DESC',
-                        'number' => 6, // Reduced from 8 to fit better on mobile
+                        'orderby' => 'name',
+                        'order' => 'ASC',
                         'hide_empty' => true,
+                        'exclude' => array(1) // Exclude "Uncategorized"
                     ));
                     
                     if ($categories) :
+                        $category_count = 0;
                         foreach ($categories as $category) :
-                            if ($category->name !== 'Uncategorized') :
+                            if ($category->name !== 'Uncategorized' && $category_count < 6) :
+                                $is_current = is_category($category->term_id);
+                                $active_class = $is_current ? ' active' : '';
+                                $category_count++;
                     ?>
-                        <a href="<?php echo get_category_link($category->term_id); ?>" class="nav-category-link px-2 px-md-3 py-1 text-decoration-none text-dark fw-semibold">
-                            <?php echo $category->name; ?>
+                        <a href="<?php echo esc_url(get_category_link($category->term_id)); ?>" class="mokreyol-nav-link<?php echo $active_class; ?>">
+                            <?php echo strtoupper(esc_html($category->name)); ?>
                         </a>
                     <?php 
                             endif;
                         endforeach;
-                    else :
-                        // Fallback menu items if no categories
-                        $menu_items = array(
-                            'Actualités' => home_url('/category/actualites/'),
-                            'Sport' => home_url('/category/sport/'),
-                            'Finance' => home_url('/category/finance/'),
-                            'People' => home_url('/category/people/'),
-                            'Life' => home_url('/category/life/'),
-                            'Plus...' => home_url('/categories/')
-                        );
-                        
-                        foreach ($menu_items as $label => $url) :
+                    endif; 
                     ?>
-                        <a href="<?php echo $url; ?>" class="nav-category-link px-2 px-md-3 py-1 text-decoration-none text-dark fw-semibold">
-                            <?php echo $label; ?>
-                        </a>
-                    <?php endforeach; endif; ?>
-                </div>
-            </div>
-            
-            <!-- Search/User Area -->
-            <div class="col-12 col-md-2 text-center text-md-end">
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2">
-                    <button class="btn btn-link text-muted p-2" title="Search" aria-label="Search">
-                        <i class="bi bi-search fs-5"></i>
-                    </button>
-                    <button class="btn btn-link text-muted p-2" title="Menu" aria-label="Menu">
-                        <i class="bi bi-list fs-5"></i>
-                    </button>
+                    <a href="<?php echo esc_url(home_url('/categories/')); ?>" class="mokreyol-nav-link">
+                        PLUS
+                        <i class="nav-dropdown-icon"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -78,108 +62,141 @@ defined( 'ABSPATH' ) || exit;
 </nav>
 
 <style>
-    /* News Navigation Bar */
-    .news-nav {
+    /* MOKREYOL Navigation Bar */
+    .mokreyol-navbar {
+        background-color: #2c2c2c;
         position: sticky;
         top: 0;
         z-index: 1030;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        background-color: #ffffff !important;
-        border-bottom: 1px solid #e9ecef !important;
+        border-bottom: 2px solid #444;
     }
 
-    .brand-logo {
+    .navbar-content {
+        gap: 1rem;
+        padding: 0.5rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .mokreyol-brand {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #e63946;
         text-decoration: none;
-        font-size: 1.75rem !important;
-        color: #0066cc !important;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        line-height: 1.2;
+        letter-spacing: -1px;
+        font-family: 'Arial', sans-serif;
+        text-transform: uppercase;
     }
 
-    .brand-logo:hover {
+    .mokreyol-brand:hover {
+        color: #ff4757;
         text-decoration: none;
-        color: #004499 !important;
-        transform: translateY(-1px);
-        transition: all 0.2s ease;
     }
 
-    .news-categories {
-        gap: 0.25rem;
-        max-height: 4rem; /* Limit to 2 rows */
-        overflow: hidden;
+    .mokreyol-nav-menu {
+        gap: 0;
+        align-items: center;
+        padding: 0.5rem 0;
     }
 
-    .nav-category-link {
-        font-size: 1rem;
-        color: #333 !important;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        white-space: nowrap;
+    .mokreyol-nav-link {
+        color: #ffffff;
+        text-decoration: none;
         font-weight: 600;
-        line-height: 1.3;
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+        position: relative;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
     }
 
-    .nav-category-link:hover {
-        background-color: #f1f5f9;
-        color: #0066cc !important;
+    .mokreyol-nav-link:hover {
+        color: #ffffff;
         text-decoration: none;
-        transform: translateY(-1px);
+        border-bottom-color: #e63946;
+        background-color: rgba(255, 255, 255, 0.05);
     }
 
-    .nav-category-link.active {
-        background-color: #0066cc;
-        color: white !important;
+    .mokreyol-nav-link.active {
+        border-bottom-color: #e63946;
+        color: #ffffff;
     }
 
-    /* Mobile responsiveness - max 2 rows */
-    @media (max-width: 768px) {
-        .news-nav .py-2 {
-            padding-top: 0.75rem !important;
-            padding-bottom: 0.75rem !important;
+    .nav-dropdown-icon {
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 6px solid currentColor;
+        display: inline-block;
+        margin-left: 0.25rem;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 991.98px) {
+        .navbar-content {
+            flex-direction: column;
+            gap: 0.5rem;
         }
         
-        .news-categories {
+        .mokreyol-brand {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mokreyol-nav-menu {
             justify-content: center;
-            gap: 0.25rem;
-            max-height: 4rem;
-            overflow: hidden;
-            display: flex;
             flex-wrap: wrap;
-            align-content: flex-start;
+            gap: 0.25rem;
         }
         
-        .nav-category-link {
-            font-size: 0.9rem;
-            padding: 0.4rem 0.6rem;
-            font-weight: 700; /* Bolder for better readability */
-            min-height: 1.8rem;
-        }
-        
-        .brand-logo {
-            font-size: 1.5rem !important;
-            font-weight: 800;
-        }
-        
-        /* Ensure buttons are properly sized */
-        .btn-link {
-            min-width: 2.5rem;
-            min-height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .mokreyol-nav-link {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.75rem;
+            margin: 0.25rem;
         }
     }
 
-    @media (max-width: 576px) {
-        .nav-category-link {
-            font-size: 0.85rem;
-            padding: 0.35rem 0.5rem;
+    @media (max-width: 767.98px) {
+        .mokreyol-navbar .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
         }
         
-        .brand-logo {
-            font-size: 1.3rem !important;
+        .mokreyol-brand {
+            font-size: 1.8rem;
+        }
+        
+        .mokreyol-nav-link {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+        }
+        
+        .mokreyol-nav-link:hover {
+            border-bottom-color: transparent;
+            background-color: #e63946;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .mokreyol-brand {
+            font-size: 1.6rem;
+        }
+        
+        .mokreyol-nav-menu {
+            gap: 0.125rem;
+        }
+        
+        .mokreyol-nav-link {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.5rem;
+            margin: 0.125rem;
         }
     }
 </style>
@@ -188,30 +205,30 @@ defined( 'ABSPATH' ) || exit;
     document.addEventListener('DOMContentLoaded', function() {
         // Highlight current page in navigation
         const currentPath = window.location.pathname;
-        const categoryLinks = document.querySelectorAll('.nav-category-link');
+        const navLinks = document.querySelectorAll('.mokreyol-nav-link');
         
-        categoryLinks.forEach(link => {
-            if (link.getAttribute('href') === currentPath) {
+        navLinks.forEach(link => {
+            const linkPath = new URL(link.getAttribute('href')).pathname;
+            if (linkPath === currentPath || (currentPath !== '/' && linkPath !== '/' && currentPath.includes(linkPath))) {
                 link.classList.add('active');
             }
         });
         
-        // Search functionality placeholder
-        const searchBtn = document.querySelector('[title="Search"]');
-        if (searchBtn) {
-            searchBtn.addEventListener('click', function() {
-                // Add search modal or redirect logic here
-                console.log('Search clicked');
+        // Add smooth scroll behavior for anchor links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
             });
-        }
-        
-        // Menu functionality placeholder
-        const menuBtn = document.querySelector('[title="Menu"]');
-        if (menuBtn) {
-            menuBtn.addEventListener('click', function() {
-                // Add mobile menu toggle logic here
-                console.log('Menu clicked');
-            });
-        }
+        });
     });
 </script>
