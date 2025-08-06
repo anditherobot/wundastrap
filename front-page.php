@@ -25,6 +25,11 @@ if (is_front_page()) {
         <div class="row">
             <main class="col-12" id="main">
                 
+                <!-- Featured Jumbotron Section -->
+                <section class="featured-section">
+                    <?php get_template_part( 'template-parts/featured-jumbotron' ); ?>
+                </section>
+                
             <section class="category-list">
                     <?php get_template_part( 'template-parts/category-list' ); ?>
                 </section>
